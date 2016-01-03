@@ -59,7 +59,7 @@ redef record connection += {
 event bro_init() &priority=5
 {
   # Create the stream. This adds a default filter automatically.
-  Log::create_stream(Entropy::LOG, [$columns=Info, $path="entropy"]);
+  Log::create_stream(Entropy::LOG, [$columns=Info, $path="dns_entropy"]);
 }
     
 event DNS::log_dns(dns: DNS::Info) 
