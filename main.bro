@@ -1,4 +1,5 @@
 redef Site::local_nets += { 192.168.0.0/16 };
+redef FileExtract::default_limit = 512000000;
 
 # This script calculates the entropy of HTTP URI requests
 @load ./http_entropy.bro
