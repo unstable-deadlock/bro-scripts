@@ -1,32 +1,43 @@
-Bro Module for File Extraction
+Bro Modules for Entropy and File Extraction
 ==============================
-
-This is a Bro script module for Bro (current master release only) that provides convenient extraction of files.
-
-Additionally, this script will generate file extensions for commonly encountered file types.
 
 Installation
 ------------
 
-::
-
 		cd <prefix>/share/bro/site/
-		git clone git://github.com/hosom/bro-file-extraction file-extraction
-		echo "@load file-extraction" >> local.bro
+		git clone git://github.com/brashendeavours/bro-scripts
+		echo "@load bro-scripts/dns_entropy" >> local.bro
+		echo "@load bro-scripts/http_entropy" >> local.bro
+		echo "@load bro-scripts/bro-file-extraction" >> local.bro
 
 With the above installation, the module will not extract any files. In addition to the changes above, code must be written to hook FileExtraction::extract. For examples of this, look at the scripts in the plugins directory.
 
 In many cases, the desired functionality is for files commonly containing malware or exploits to be extracted. To do that, perform the actions below.
 
-::
-
-		echo "@load file-extraction/plugins/extract-common-exploit-types
+		echo "@load bro-file-extraction/plugins/extract-common-exploit-types
 
 Additionally, to store files by sha1 hash, use the following:
 
-::
+		echo "@load bro-file-extraction/plugins/store-files-by-sha1
 
-		echo "@load file-extraction/plugins/store-files-by-sha1
+DNS/HTTP Entropy
+===============================
+
+Configuration
+-------------
+
+No configuration is required.
+This set of scripts provides you with two additional log files that include the calculated entropies.
+
+Output
+-------------
+
+dns_entropy.log Includes the calculated entropy of the dns query, the dns responses, as well as a field that contains the highest entropy of all responses.
+
+http_entropy.log Includes the calculated entropy of the URI request.
+
+File Extraction
+===============================
 
 Configuration
 -------------
