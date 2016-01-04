@@ -1,7 +1,7 @@
 
-@load base/protocols/dns
+#@load base/protocols/dns
 
-module Entropy;
+module DNS_Entropy;
 
 export {
   # Create an ID for our new stream. By convention, this is
@@ -59,7 +59,7 @@ redef record connection += {
 event bro_init() &priority=5
 {
   # Create the stream. This adds a default filter automatically.
-  Log::create_stream(Entropy::LOG, [$columns=Info, $path="dns_entropy"]);
+  Log::create_stream(DNS_Entropy::LOG, [$columns=Info, $path="dns_entropy"]);
 }
     
 event DNS::log_dns(dns: DNS::Info) 
@@ -68,7 +68,7 @@ event DNS::log_dns(dns: DNS::Info)
   {
   	#print dns;
     
-    local rec: Entropy::Info;
+    local rec: DNS_Entropy::Info;
     rec = [$ts = network_time(), 
           $uid = dns$uid, 
           $id = dns$id,
@@ -105,6 +105,6 @@ event DNS::log_dns(dns: DNS::Info)
 
     #print rec;
     #print "";
-    Log::write(Entropy::LOG, rec);
+    Log::write(DNS_Entropy::LOG, rec);
   }
 }
