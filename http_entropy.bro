@@ -50,7 +50,8 @@ export {
     info_msg:                string    &log &optional;
     ## Filename given in the Content-Disposition header sent by the
     ## server.
-    filename:                string    &log &optional;
+    orig_filenames:           vector of string   &log &optional;
+    resp_filenames:           vector of string   &log &optional;
     ## Username if basic-auth is performed for the request.
     username:                string    &log &optional;
     ## Password if basic-auth is performed for the request.
@@ -77,26 +78,26 @@ event bro_init() &priority=5
   # Create the stream. This adds a default filter automatically.
   Log::create_stream(HTTP_Entropy::LOG, [$columns=Info, $path="http_entropy"]);
 }
-    
-event HTTP::log_http(http: HTTP::Info) 
+
+event HTTP::log_http(http: HTTP::Info)
 {
 	#print http;
-  
+
   local rec: HTTP_Entropy::Info;
-  rec = [$ts = network_time(), 
-        $uid = http$uid, 
+  rec = [$ts = network_time(),
+        $uid = http$uid,
         $id = http$id,
         $trans_depth = http$trans_depth];
 
-  if (http?$method) {rec$method = http$method;} 
+  if (http?$method) {rec$method = http$method;}
   if (http?$host) {rec$host = http$host;}
 
-  if (http?$uri) 
+  if (http?$uri)
   {
     rec$uri = http$uri;
     rec$uri_entropy = find_entropy(rec$uri)$entropy;
   }
-    
+
   if (http?$referrer) {rec$referrer = http$referrer;}
   if (http?$user_agent) {rec$user_agent = http$user_agent;}
   if (http?$request_body_len) {rec$request_body_len = http$request_body_len;}
@@ -105,7 +106,8 @@ event HTTP::log_http(http: HTTP::Info)
   if (http?$status_msg) {rec$status_msg = http$status_msg;}
   if (http?$info_code) {rec$info_code = http$info_code;}
   if (http?$info_msg) {rec$info_msg = http$info_msg;}
-  if (http?$filename) {rec$filename = http$filename;}
+  if (http?$orig_filenames) {rec$orig_filenames = http$orig_filenames;}
+  if (http?$resp_filenames) {rec$resp_filenames = http$resp_filenames;}
   if (http?$username) {rec$username = http$username;}
   if (http?$password) {rec$password = http$password;}
   if (http?$proxied) {rec$proxied = http$proxied;}
